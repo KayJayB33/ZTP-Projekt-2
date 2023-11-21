@@ -1,36 +1,31 @@
 package pl.edu.pk.ztpprojekt2.model;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
-@Entity
-@Table
+@Document("products")
 public class Product {
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+        private String id;
 
-        @Column(nullable = false)
         @NotNull(message = "Name may not be null")
         @NotBlank(message = "Name may not be blank")
         @NotEmpty(message = "Name may not be empty")
         @Size(min = 2, max = 32, message = "Name must be between 2 and 32 characters long")
         private String name;
 
-        @Column(nullable = false, columnDefinition = "TEXT")
         @NotNull(message = "Description may not be null")
         @NotBlank(message = "Description may not be blank")
         @NotEmpty(message = "Description may not be empty")
         private String description;
 
-        @Column(nullable = false)
         @NotNull(message = "Price may not be null")
         @Positive
         private BigDecimal price;
-        @Column(name = "available_quantity", nullable = false)
         @NotNull(message = "Available quantity may not be null")
         @PositiveOrZero
         private Integer availableQuantity;
@@ -38,7 +33,7 @@ public class Product {
         public Product() {
         }
 
-        public Product(Long id, String name, String description, BigDecimal price, Integer availableQuantity) {
+        public Product(String id, String name, String description, BigDecimal price, Integer availableQuantity) {
                 this.id = id;
                 this.name = name;
                 this.description = description;
@@ -46,7 +41,7 @@ public class Product {
                 this.availableQuantity = availableQuantity;
         }
 
-        public Long getId() {
+        public String getId() {
                 return id;
         }
 

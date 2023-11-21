@@ -1,7 +1,9 @@
 package pl.edu.pk.ztpprojekt2.service;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.edu.pk.ztpprojekt2.controller.ProductRequest;
 import pl.edu.pk.ztpprojekt2.exception.DuplicatedResourceException;
 import pl.edu.pk.ztpprojekt2.exception.ResourceNotFoundException;
 import pl.edu.pk.ztpprojekt2.model.Product;
@@ -22,29 +24,30 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Product getProduct(Long id) {
+    public Product getProduct(String id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product with id {%d} not found".formatted(id)));
+                .orElseThrow(() -> new ResourceNotFoundException("Product with id {%s} not found".formatted(id)));
     }
 
-    public Long addProduct(Product product) {
-        if(productRepository.findByName(product.getName()).isPresent()) {
-            throw new DuplicatedResourceException("Product with name {%s} already exists".formatted(product.getName()));
+    public String addProduct(ProductRequest request) {
+        if(productRepository.findByName(request.name()).isPresent()) {
+            throw new DuplicatedResourceException("Product with name {%s} already exists".formatted(request.name()));
         }
+        Product product = new Product(ObjectId.get().toString(),request.name(), request.description(), request.price(), request.availableQuantity());
         return productRepository.save(product).getId();
     }
 
-    public void deleteProduct(Long id) {
+    public void deleteProduct(String id) {
         getProduct(id);
         productRepository.deleteById(id);
     }
 
-    public Product updateProduct(Long id, Product newProduct) {
-        productRepository.update(id,
-                newProduct.getName(),
-                newProduct.getDescription(),
-                newProduct.getPrice(),
-                newProduct.getAvailableQuantity());
-        return getProduct(id);
+    public Product updateProduct(String id, ProductRequest request) {
+        Product product = getProduct(id);
+        product.setName(request.name());
+        product.setDescription(request.description());
+        product.setPrice(request.price());
+        product.setAvailableQuantity(request.availableQuantity());
+        return productRepository.save(product);
     }
 }
