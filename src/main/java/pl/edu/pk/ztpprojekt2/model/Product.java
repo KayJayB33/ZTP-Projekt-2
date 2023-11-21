@@ -11,18 +11,15 @@ import java.util.Objects;
 public class Product {
         @Id
         private String id;
-
         @NotNull(message = "Name may not be null")
         @NotBlank(message = "Name may not be blank")
         @NotEmpty(message = "Name may not be empty")
         @Size(min = 2, max = 32, message = "Name must be between 2 and 32 characters long")
         private String name;
-
         @NotNull(message = "Description may not be null")
         @NotBlank(message = "Description may not be blank")
         @NotEmpty(message = "Description may not be empty")
         private String description;
-
         @NotNull(message = "Price may not be null")
         @Positive
         private BigDecimal price;
