@@ -19,7 +19,7 @@ Feature: Product Management for REST API
       | name             | description         | price | availableQuantity |
       | Negative Product | Invalid Description | -5.0  | 50                |
     Then the response status code should be 400
-    And the response message should be "Invalid input: Price cannot be negative"
+    And the response message should be "Invalid input: Price must be positive, provided {price}"
 
   Scenario: Product status changes when availableQuantity changes to 0
     Given a product with the following details exists:
