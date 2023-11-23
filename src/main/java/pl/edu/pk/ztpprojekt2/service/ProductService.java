@@ -1,11 +1,13 @@
 package pl.edu.pk.ztpprojekt2.service;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.pk.ztpprojekt2.controller.ProductRequest;
 import pl.edu.pk.ztpprojekt2.exception.DuplicatedResourceException;
 import pl.edu.pk.ztpprojekt2.exception.ResourceNotFoundException;
 import pl.edu.pk.ztpprojekt2.model.Product;
+import pl.edu.pk.ztpprojekt2.model.ProductBasicDTO;
 import pl.edu.pk.ztpprojekt2.repository.ProductRepository;
 
 import java.util.List;
@@ -14,13 +16,18 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ModelMapper modelMapper;
 
-    public ProductService(@Autowired ProductRepository productRepository) {
+    public ProductService(@Autowired ProductRepository productRepository, @Autowired ModelMapper modelMapper) {
         this.productRepository = productRepository;
+        this.modelMapper = modelMapper;
     }
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<ProductBasicDTO> getAllProducts() {
+        return productRepository.findAll()
+                .stream()
+                .map(p -> modelMapper.map(p, ProductBasicDTO.class))
+                .toList();
     }
 
     public Product getProduct(String id) {

@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pk.ztpprojekt2.model.Product;
+import pl.edu.pk.ztpprojekt2.model.ProductBasicDTO;
 import pl.edu.pk.ztpprojekt2.service.ProductService;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class ProductController {
 
     @GetMapping
     @ResponseBody
-    ResponseEntity<List<Product>> getAllProducts() {
+    ResponseEntity<List<ProductBasicDTO>> getAllProducts() {
         return new ResponseEntity<>(productService.getAllProducts(), HttpStatus.OK);
     }
 
