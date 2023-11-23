@@ -1,5 +1,8 @@
 package pl.edu.pk.ztpprojekt2.service;
 
+import org.javers.core.Javers;
+import org.javers.repository.jql.QueryBuilder;
+import org.javers.shadow.Shadow;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +20,12 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
+    private final Javers javers;
 
-    public ProductService(@Autowired ProductRepository productRepository, @Autowired ModelMapper modelMapper) {
+    public ProductService(@Autowired ProductRepository productRepository, @Autowired ModelMapper modelMapper, @Autowired Javers javers) {
         this.productRepository = productRepository;
         this.modelMapper = modelMapper;
+        this.javers = javers;
     }
 
     public List<ProductBasicDTO> getAllProducts() {
@@ -55,5 +60,12 @@ public class ProductService {
         product.setPrice(request.price());
         product.setAvailableQuantity(request.availableQuantity());
         return productRepository.save(product);
+    }
+
+    public List<Product> getProductHistory(String id) {
+        List<Shadow<Product>> shadows = javers.findShadows(QueryBuilder.byInstanceId(id, Product.class).build());
+        return shadows.stream()
+                .map(Shadow::get)
+                .toList();
     }
 }

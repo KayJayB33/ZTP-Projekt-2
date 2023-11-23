@@ -1,6 +1,7 @@
 package pl.edu.pk.ztpprojekt2.controller;
 
 import jakarta.validation.Valid;
+import org.javers.core.Javers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,11 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final Javers javers;
 
-    public ProductController(@Autowired ProductService productService) {
+    public ProductController(@Autowired ProductService productService, @Autowired Javers javers) {
         this.productService = productService;
+        this.javers = javers;
     }
 
     @GetMapping
@@ -31,6 +34,12 @@ public class ProductController {
     @ResponseBody
     ResponseEntity<Product> getProductById(@PathVariable("id") String id) {
         return new ResponseEntity<>(productService.getProduct(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/history")
+    @ResponseBody
+    ResponseEntity<List<Product>> getProductHistoryById(@PathVariable("id") String id) {
+        return new ResponseEntity<>(productService.getProductHistory(id), HttpStatus.OK);
     }
 
     @PostMapping
