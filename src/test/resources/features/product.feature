@@ -1,0 +1,48 @@
+Feature: Product Management for REST API
+
+  Background:
+    Given the API base URL is "http://localhost:8080/api/v1"
+    And the product endpoint is "/products"
+
+  Scenario: Add a new product with valid fields
+    When I add a new product with the following details:
+      | name             | description          | price | availableQuantity |
+      | New Product      | Product Description  | 20.0  | 100               |
+    Then the response status code should be 201
+    And the response should contain new product id
+    And the product details should be as follows:
+      | name             | description          | price | availableQuantity | productStatus |
+      | New Product      | Product Description  | 20.0  | 100               | available     |
+
+  Scenario: Add a new product with negative price
+    When I add a new product with the following details:
+      | name             | description         | price | availableQuantity |
+      | Negative Product | Invalid Description | -5.0  | 50                |
+    Then the response status code should be 400
+    And the response message should be "Invalid input: Price cannot be negative"
+
+  Scenario: Product status changes when availableQuantity changes to 0
+    Given a product with the following details exists:
+      | name             | description     | price | availableQuantity |
+      | Existing Product | Old Description | 30.0  | 10                |
+    When I update the product with availableQuantity set to 0
+    Then the response status code should be 200
+    And the product details should be as follows:
+      | name             | description     | price | availableQuantity | productStatus |
+      | Existing Product | Old Description | 30.0  | 0                 | out of stock  |
+
+  Scenario: Return product history of changes
+    Given a product with the following details exists:
+      | name            | description         | price | availableQuantity |
+      | Historical Prod | Initial Description | 25.0  | 50                |
+    When I update the product with a new description
+    And I update the product with a new price
+    And I update the product with a new availableQuantity
+    And I retrieve the product history
+    Then the response status code should be 200
+    And the product history should contain the following entries:
+      | description         | price | availableQuantity |
+      | Initial Description | 25.0  | 50                |
+      | New Description     | 25.0  | 50                |
+      | New Description     | 30.0  | 50                |
+      | New Description     | 30.0  | 0                 |
