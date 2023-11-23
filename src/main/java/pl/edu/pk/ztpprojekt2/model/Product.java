@@ -1,5 +1,6 @@
 package pl.edu.pk.ztpprojekt2.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.constraints.*;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -7,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.math.BigDecimal;
 
 @Document("products")
-@JsonPropertyOrder({"id", "name", "description", "price", "availableQuantity", "createdDate", "lastModifiedDate"})
+@JsonPropertyOrder({"id", "name", "description", "price", "availableQuantity", "productStatus", "createdDate", "lastModifiedDate"})
 public class Product extends BaseEntity {
         @NotNull(message = "Name may not be null")
         @NotBlank(message = "Name may not be blank")
@@ -23,12 +24,12 @@ public class Product extends BaseEntity {
         private BigDecimal price;
         @NotNull(message = "Available quantity may not be null")
         @PositiveOrZero
-        private Integer availableQuantity;
+        private int availableQuantity;
 
         public Product() {
         }
 
-        public Product(String name, String description, BigDecimal price, Integer availableQuantity) {
+        public Product(String name, String description, BigDecimal price, int availableQuantity) {
                 this.name = name;
                 this.description = description;
                 this.price = price;
@@ -59,11 +60,16 @@ public class Product extends BaseEntity {
                 this.price = price;
         }
 
-        public Integer getAvailableQuantity() {
+        public int getAvailableQuantity() {
                 return availableQuantity;
         }
 
-        public void setAvailableQuantity(Integer availableQuantity) {
+        public void setAvailableQuantity(int availableQuantity) {
                 this.availableQuantity = availableQuantity;
+        }
+
+        @JsonProperty("productState")
+        public ProductState getProductState() {
+                return this.availableQuantity > 0 ? ProductState.AVAILABLE : ProductState.OUT_OF_STOCK;
         }
 }

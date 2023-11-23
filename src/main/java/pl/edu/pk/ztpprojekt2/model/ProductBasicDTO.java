@@ -6,14 +6,16 @@ public class ProductBasicDTO {
     private String id;
     private String name;
     private BigDecimal price;
+    private ProductState productState;
 
     public ProductBasicDTO() {
     }
 
-    public ProductBasicDTO(String id, String name, BigDecimal price) {
+    public ProductBasicDTO(String id, String name, BigDecimal price, ProductState productState) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.productState = productState;
     }
 
     public String getId() {
@@ -38,5 +40,13 @@ public class ProductBasicDTO {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public ProductState getProductState() {
+        return productState;
+    }
+
+    public void setProductState(ProductState productState) {
+        this.productState = productState;
     }
 }
