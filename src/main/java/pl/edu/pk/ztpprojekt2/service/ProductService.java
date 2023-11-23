@@ -1,6 +1,5 @@
 package pl.edu.pk.ztpprojekt2.service;
 
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.pk.ztpprojekt2.controller.ProductRequest;
@@ -33,7 +32,7 @@ public class ProductService {
         if(productRepository.findByName(request.name()).isPresent()) {
             throw new DuplicatedResourceException("Product with name {%s} already exists".formatted(request.name()));
         }
-        Product product = new Product(ObjectId.get().toString(),request.name(), request.description(), request.price(), request.availableQuantity());
+        Product product = new Product(request.name(), request.description(), request.price(), request.availableQuantity());
         return productRepository.save(product).getId();
     }
 

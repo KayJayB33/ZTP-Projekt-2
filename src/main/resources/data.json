@@ -1,27 +1,23 @@
 [
   {
-    "id": "655d34336e428bd47eca238a",
     "name": "Acer Nitro 5",
     "description": "Zanurz się w gamingowych światach i podziwiaj je przez pryzmat technologii Ray Tracingu z kartą graficzną GeForce RTX. Razem z nowoczesnym procesorem tworzą duet, który pozwoli Ci wejść na wyższy poziom grania. O niskie temperatury natomiast zadba inteligentny układ chłodzenia, pozwalający na wydobycie z karty i procesora maksymalnej wydajności.",
     "price": 5249.0,
     "availableQuantity": 10
   },
   {
-    "id": "655d346e6e428bd47eca238b",
     "name": "ASUS TUF Gaming F15",
     "description": "Poznaj ASUS TUF Gaming F15, czyli laptop, który nie boi się wyzwań i wymagających gier. Ten sprzęt został stworzony z myślą o profesjonalistach. Właśnie dlatego oferuje wydajność, cichą i chłodną pracę oraz podświetlaną klawiaturę. Na jego dużym ekranie każdy szczegół jest zauważalny, a Dolby Atmos zapewni Ci niesamowite efekty dźwiękowe. Odkrywaj wirtualny świat na własnych zasadach i z profesjonalną jakością.",
     "price": 4299.0,
     "availableQuantity": 15
   },
   {
-    "id": "655d34766e428bd47eca238c",
     "name": "Dell Inspiron 3520",
     "description": "Dell Inspiron 3520 – laptop do pracy i nauki. Jeśli potrzebujesz niezawodnego narzędzia do codziennej pracy lub nauki zdalnej, postaw na Inspirona 15 z serii 3000. Poznaj bardziej responsywną, ale cichszą wydajność dzięki najnowszym procesorom Intel. Dzięki gwarancji jakości Dell będziesz mieć solidnego i bardzo wydajnego laptopa w przystępnej cenie. Czego chcieć więcej?",
     "price": 2999.0,
     "availableQuantity": 3
   },
   {
-    "id": "655d347a6e428bd47eca238d",
     "name": "MSI Thin GF63",
     "description": "Czas pokazać Ci laptopa stworzonego dla prawdziwych graczy – MSI GF63. Wyposażony w procesor Intel Core 12. generacji i potężną kartę graficzną NVIDIA GeForce RTX 20, ten laptop dostarcza wyjątkową wydajność, która przeniesie Cię w świat wirtualnych przygód. Dzięki ekranowi IPS o częstotliwości odświeżania 144 Hz doświadczysz płynnych animacji i ostrych detali, zapewniając sobie przewagę nad rywalami.",
     "price": 2899.0,

@@ -1,16 +1,14 @@
 package pl.edu.pk.ztpprojekt2.model;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.validation.constraints.*;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @Document("products")
-public class Product {
-        @Id
-        private String id;
+@JsonPropertyOrder({"id", "name", "description", "price", "availableQuantity", "createdDate", "lastModifiedDate"})
+public class Product extends BaseEntity {
         @NotNull(message = "Name may not be null")
         @NotBlank(message = "Name may not be blank")
         @NotEmpty(message = "Name may not be empty")
@@ -30,16 +28,11 @@ public class Product {
         public Product() {
         }
 
-        public Product(String id, String name, String description, BigDecimal price, Integer availableQuantity) {
-                this.id = id;
+        public Product(String name, String description, BigDecimal price, Integer availableQuantity) {
                 this.name = name;
                 this.description = description;
                 this.price = price;
                 this.availableQuantity = availableQuantity;
-        }
-
-        public String getId() {
-                return id;
         }
 
         public String getName() {
@@ -72,29 +65,5 @@ public class Product {
 
         public void setAvailableQuantity(Integer availableQuantity) {
                 this.availableQuantity = availableQuantity;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-                if (this == o) return true;
-                if (o == null || getClass() != o.getClass()) return false;
-                Product product = (Product) o;
-                return Objects.equals(id, product.id) && Objects.equals(name, product.name) && Objects.equals(description, product.description) && Objects.equals(price, product.price) && Objects.equals(availableQuantity, product.availableQuantity);
-        }
-
-        @Override
-        public int hashCode() {
-                return Objects.hash(id, name, description, price, availableQuantity);
-        }
-
-        @Override
-        public String toString() {
-                return "Product{" +
-                        "id=" + id +
-                        ", name='" + name + '\'' +
-                        ", description='" + description + '\'' +
-                        ", price=" + price +
-                        ", availableQuantity=" + availableQuantity +
-                        '}';
         }
 }
