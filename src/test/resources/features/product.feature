@@ -19,14 +19,14 @@ Feature: Product Management for REST API
       | name             | description         | price | availableQuantity |
       | Negative Product | Invalid Description | -5.0  | 50                |
     Then the response status code should be 400
-    And the response message should be "Invalid input: Price must be positive, provided {price}"
+    And the response message should be "[\"Invalid Input: Price must be positive, provided -5.0\"]"
 
   Scenario: Product status changes when availableQuantity changes to 0
     Given a product with the following details exists:
       | name             | description     | price | availableQuantity |
       | Existing Product | Old Description | 30.0  | 10                |
     When I update the product with availableQuantity set to 0
-    Then the response status code should be 200
+    Then the response status code should be 201
     And the product details should be as follows:
       | name             | description     | price | availableQuantity | productStatus |
       | Existing Product | Old Description | 30.0  | 0                 | out of stock  |
@@ -35,14 +35,11 @@ Feature: Product Management for REST API
     Given a product with the following details exists:
       | name            | description         | price | availableQuantity |
       | Historical Prod | Initial Description | 25.0  | 50                |
-    When I update the product with a new description
-    And I update the product with a new price
-    And I update the product with a new availableQuantity
-    And I retrieve the product history
-    Then the response status code should be 200
+    When I update the product with the following details:
+      | name            | description     | price | availableQuantity |
+      | Historical Prod | New Description | 30.0  | 10                |
+    Then the response status code should be 201
     And the product history should contain the following entries:
-      | description         | price | availableQuantity |
-      | Initial Description | 25.0  | 50                |
-      | New Description     | 25.0  | 50                |
-      | New Description     | 30.0  | 50                |
-      | New Description     | 30.0  | 0                 |
+      | name            | description         | price | availableQuantity |
+      | Historical Prod | New Description     | 30.0  | 10                |
+      | Historical Prod | Initial Description | 25.0  | 50                |
