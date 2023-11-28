@@ -2,7 +2,9 @@ package pl.edu.pk.ztpprojekt2.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.data.mongodb.core.mapping.Document;
+import pl.edu.pk.ztpprojekt2.util.PriceSerializer;
 
 import java.math.BigDecimal;
 
@@ -12,6 +14,7 @@ public class Product extends BaseEntity {
 
         private String name;
         private String description;
+        @JsonSerialize(using = PriceSerializer.class)
         private BigDecimal price;
         private int availableQuantity;
 

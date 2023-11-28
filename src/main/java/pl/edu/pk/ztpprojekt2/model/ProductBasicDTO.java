@@ -1,10 +1,14 @@
 package pl.edu.pk.ztpprojekt2.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import pl.edu.pk.ztpprojekt2.util.PriceSerializer;
+
 import java.math.BigDecimal;
 
 public class ProductBasicDTO {
     private String id;
     private String name;
+    @JsonSerialize(using = PriceSerializer.class)
     private BigDecimal price;
     private ProductState productState;
 

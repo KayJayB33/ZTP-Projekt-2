@@ -13,6 +13,7 @@ import io.cucumber.core.logging.LoggerFactory;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.BeforeAll;
+import io.cucumber.java.DataTableType;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -87,6 +88,15 @@ public class ProductStepDefinitions {
         }
     }
 
+    @DataTableType
+    public Product authorEntry(Map<String, String> entry) {
+        return new Product(
+                entry.get("name"),
+                entry.get("description"),
+                new BigDecimal(entry.get("price")),
+                Integer.parseInt(entry.get("availableQuantity")));
+    }
+
     @Given("the API base URL is {string}")
     public void the_api_base_url_is(String string) {
         // Write code here that turns the phrase above into concrete actions
@@ -108,12 +118,7 @@ public class ProductStepDefinitions {
         // Double, Byte, Short, Long, BigInteger or BigDecimal.
         //
         // For other transformations you can register a DataTableType.
-        Map<String, String> example = dataTable.asMaps(String.class, String.class).get(0);
-        newProduct = new Product();
-        newProduct.setName(example.get("name"));
-        newProduct.setDescription(example.get("description"));
-        newProduct.setPrice(new BigDecimal(example.get("price")));
-        newProduct.setAvailableQuantity(Integer.parseInt(example.get("availableQuantity")));
+        newProduct = dataTable.asList(Product.class).get(0);
 
         String newProductJson = objectMapper.writeValueAsString(newProduct);
 
@@ -155,12 +160,7 @@ public class ProductStepDefinitions {
         assertThat(response.body()).isNotNull().isNotEmpty();
 
         ProductResponse productResponse = objectMapper.readValue(response.body(), ProductResponse.class);
-        Map<String, String> example = dataTable.asMaps(String.class, String.class).get(0);
-        newProduct = new Product();
-        newProduct.setName(example.get("name"));
-        newProduct.setDescription(example.get("description"));
-        newProduct.setPrice(new BigDecimal(example.get("price")));
-        newProduct.setAvailableQuantity(Integer.parseInt(example.get("availableQuantity")));
+        newProduct = dataTable.asList(Product.class).get(0);
 
         assertThat(productResponse.name()).isEqualTo(newProduct.getName());
         assertThat(productResponse.description()).isEqualTo(newProduct.getDescription());
@@ -176,12 +176,7 @@ public class ProductStepDefinitions {
 
     @Given("a product with the following details exists:")
     public void a_product_with_the_following_details_exists(DataTable dataTable) throws IOException, InterruptedException {
-        Map<String, String> example = dataTable.asMaps(String.class, String.class).get(0);
-        newProduct = new Product();
-        newProduct.setName(example.get("name"));
-        newProduct.setDescription(example.get("description"));
-        newProduct.setPrice(new BigDecimal(example.get("price")));
-        newProduct.setAvailableQuantity(Integer.parseInt(example.get("availableQuantity")));
+        newProduct = dataTable.asList(Product.class).get(0);
 
         String newProductJson = objectMapper.writeValueAsString(newProduct);
 
@@ -217,12 +212,8 @@ public class ProductStepDefinitions {
         // Double, Byte, Short, Long, BigInteger or BigDecimal.
         //
         // For other transformations you can register a DataTableType.
-        Map<String, String> example = dataTable.asMaps(String.class, String.class).get(0);
-        Product updatedProduct = new Product();
-        updatedProduct.setName(example.get("name"));
-        updatedProduct.setDescription(example.get("description"));
-        updatedProduct.setPrice(new BigDecimal(example.get("price")));
-        updatedProduct.setAvailableQuantity(Integer.parseInt(example.get("availableQuantity")));
+
+        Product updatedProduct = dataTable.asList(Product.class).get(0);
 
         String newProductJson = objectMapper.writeValueAsString(updatedProduct);
 
@@ -233,6 +224,7 @@ public class ProductStepDefinitions {
 
         response = httpclient.send(request, HttpResponse.BodyHandlers.ofString());
     }
+
     @Then("the product history should contain the following entries:")
     public void the_product_history_should_contain_the_following_entries(DataTable dataTable) throws IOException, InterruptedException {
         // Write code here that turns the phrase above into concrete actions
@@ -248,14 +240,20 @@ public class ProductStepDefinitions {
 
         HttpResponse<String> response = httpclient.send(request, HttpResponse.BodyHandlers.ofString());
         assertThat(response.body()).isNotNull().isNotEmpty();
+
         ProductResponse[] productResponses = objectMapper.readValue(response.body(), ProductResponse[].class);
-        List<Map<String, String>> examples = dataTable.asMaps(String.class, String.class);
+        List<Product> examples = dataTable.asList(Product.class);
+
         for (int i = 0; i < examples.size(); i++) {
             ProductResponse productResponse = productResponses[i];
-            assertThat(productResponse.name()).isEqualTo(examples.get(i).get("name"));
-            assertThat(productResponse.description()).isEqualTo(examples.get(i).get("description"));
-            assertThat(productResponse.price().doubleValue()).isEqualTo(Double.parseDouble(examples.get(i).get("price")));
-            assertThat(productResponse.availableQuantity()).isEqualTo(Integer.parseInt(examples.get(i).get("availableQuantity")));
+            assertThat(productResponse.name())
+                    .isEqualTo(examples.get(i).getName());
+            assertThat(productResponse.description())
+                    .isEqualTo(examples.get(i).getDescription());
+            assertThat(productResponse.price())
+                    .isEqualTo(examples.get(i).getPrice());
+            assertThat(productResponse.availableQuantity())
+                    .isEqualTo(examples.get(i).getAvailableQuantity());
         }
     }
 }
